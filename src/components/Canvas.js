@@ -6,7 +6,8 @@ const canvasStyles = {
 };
 
 export default function Canvas() {
-  const { canvasRef, initCanvas, handleMouseMove } = useCanvas();
+  const { canvasRef, initCanvas, handleMouseMove, handleMouseDown, handleMouseUp } =
+    useCanvas();
 
   useEffect(() => {
     initCanvas({ width: 540, height: 320 });
@@ -16,6 +17,8 @@ export default function Canvas() {
     <canvas
       ref={canvasRef}
       onMouseMove={handleMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       style={canvasStyles}
     />
   );

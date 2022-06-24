@@ -1,14 +1,15 @@
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useState, useContext, useRef } from 'react';
 
 const CanvasContext = createContext();
 
 export const CanvasProvider = ({ children }) => {
+  const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
 
   const initCanvas = ({ width, height }) => {
     const canvas = canvasRef.current;
-    canvas.width = width * 2;
+    canvas.width = width * 2; // 2x zoomed out for better line sharpnes
     canvas.height = height * 2;
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
@@ -23,6 +24,10 @@ export const CanvasProvider = ({ children }) => {
   };
 
   const handleMouseMove = ({ nativeEvent }) => {
+    if (!isDrawing) {
+      return;
+    }
+
     const { offsetX, offsetY } = nativeEvent;
     console.log({ x: offsetX, y: offsetY });
 
@@ -30,8 +35,28 @@ export const CanvasProvider = ({ children }) => {
     ctxRef.current.stroke();
   };
 
+  const handleMouseDown = ({ nativeEvent }) => {
+    const { offsetX, offsetY } = nativeEvent;
+    ctxRef.current.beginPath();
+    ctxRef.current.moveTo(offsetX, offsetY);
+    setIsDrawing(true);
+  };
+
+  const handleMouseUp = () => {
+    ctxRef.current.closePath();
+    setIsDrawing(false);
+  };
+
   return (
-    <CanvasContext.Provider value={{ canvasRef, initCanvas, handleMouseMove }}>
+    <CanvasContext.Provider
+      value={{
+        canvasRef,
+        initCanvas,
+        handleMouseMove,
+        handleMouseDown,
+        handleMouseUp,
+      }}
+    >
       {children}
     </CanvasContext.Provider>
   );
