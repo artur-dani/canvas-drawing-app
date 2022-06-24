@@ -1,25 +1,34 @@
-import React, { useEffect } from 'react';
-import { useCanvas } from '../context/CanvasContext';
+import React, { useEffect } from "react";
+import { useCanvas } from "../context/CanvasContext";
 
 const canvasStyles = {
-  border: '1px solid #333',
+  border: "1px solid #333",
 };
 
-export default function Canvas() {
-  const { canvasRef, initCanvas, handleMouseMove, handleMouseDown, handleMouseUp } =
-    useCanvas();
+export default function Canvas({ width, height }) {
+  const {
+    canvasRef,
+    handleMouseMove,
+    handleMouseDown,
+    handleMouseUp,
+    setCanvasWidth,
+    setCanvasHeight,
+  } = useCanvas();
 
   useEffect(() => {
-    initCanvas({ width: 540, height: 320 });
-  }, []);
+    setCanvasWidth(width);
+    setCanvasHeight(height);
+  }, [width, height]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      onMouseMove={handleMouseMove}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      style={canvasStyles}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        style={canvasStyles}
+      />
+    </>
   );
 }

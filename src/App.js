@@ -11,7 +11,7 @@ export default function App() {
       <div>
         <ClearCanvasButton />
       </div>
-      <Canvas />
+      <Canvas width="540" height="320" />
     </div>
   );
 }

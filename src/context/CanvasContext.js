@@ -1,27 +1,43 @@
-import React, { createContext, useState, useContext, useRef } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from "react";
 
 const CanvasContext = createContext();
 
 export const CanvasProvider = ({ children }) => {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isDrawingMode, setIsDrawingMode] = useState(true);
+  const [strokeColor, setStrokeColor] = useState("#000");
+  const [strokeWidth, setStrokeWidth] = useState(2);
+  const [canvasWidth, setCanvasWidth] = useState(220);
+  const [canvasHeight, setCanvasHeight] = useState(140);
+
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
 
-  const initCanvas = ({ width, height }) => {
+  useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = width * 2; // 2x zoomed out for better line sharpnes
-    canvas.height = height * 2;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.width = canvasWidth * 2; // * 2 for retina
+    canvas.height = canvasHeight * 2;
+    canvas.style.width = `${canvasWidth}px`;
+    canvas.style.height = `${canvasHeight}px`;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctxRef.current = ctx;
 
     ctx.scale(2, 2);
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 3;
-  };
+    ctx.lineCap = "round";
+  }, [canvasWidth, canvasHeight]);
+
+  useEffect(() => {
+    const ctx = ctxRef.current;
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = strokeWidth;
+  }, [strokeColor, strokeWidth]);
 
   const handleMouseMove = ({ nativeEvent }) => {
     if (!isDrawing) {
@@ -29,7 +45,6 @@ export const CanvasProvider = ({ children }) => {
     }
 
     const { offsetX, offsetY } = nativeEvent;
-    console.log({ x: offsetX, y: offsetY });
 
     ctxRef.current.lineTo(offsetX, offsetY);
     ctxRef.current.stroke();
@@ -49,8 +64,8 @@ export const CanvasProvider = ({ children }) => {
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
-    const ctxRef = canvas.getContext('2d');
-    ctxRef.fillStyle = 'white';
+    const ctxRef = canvas.getContext("2d");
+    ctxRef.fillStyle = "white";
     ctxRef.fillRect(0, 0, canvas.width, canvas.height);
   };
 
@@ -58,11 +73,15 @@ export const CanvasProvider = ({ children }) => {
     <CanvasContext.Provider
       value={{
         canvasRef,
-        initCanvas,
         handleMouseMove,
         handleMouseDown,
         handleMouseUp,
         clearCanvas,
+        setStrokeColor,
+        setStrokeWidth,
+        setIsDrawingMode,
+        setCanvasWidth,
+        setCanvasHeight,
       }}
     >
       {children}
