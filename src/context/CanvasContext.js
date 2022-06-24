@@ -47,6 +47,13 @@ export const CanvasProvider = ({ children }) => {
     setIsDrawing(false);
   };
 
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctxRef = canvas.getContext('2d');
+    ctxRef.fillStyle = 'white';
+    ctxRef.fillRect(0, 0, canvas.width, canvas.height);
+  };
+
   return (
     <CanvasContext.Provider
       value={{
@@ -55,6 +62,7 @@ export const CanvasProvider = ({ children }) => {
         handleMouseMove,
         handleMouseDown,
         handleMouseUp,
+        clearCanvas,
       }}
     >
       {children}
