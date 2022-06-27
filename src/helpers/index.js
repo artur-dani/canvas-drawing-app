@@ -15,3 +15,13 @@ export function clearPrevSelection(ctx, prevSelection) {
   ctx.rect(prevSelection.x, prevSelection.y, prevSelection.w, prevSelection.h);
   ctx.stroke();
 }
+
+export function isHoverSelection(cursor, selection) {
+  if (!cursor || !selection) return false;
+  if (cursor.x < selection.x) return false;
+  if (cursor.y < selection.y) return false;
+  if (cursor.x > selection.x + selection.w) return false;
+  if (cursor.y > selection.y + selection.w) return false;
+
+  return true;
+}

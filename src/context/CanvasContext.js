@@ -6,7 +6,11 @@ import React, {
   useEffect,
 } from 'react';
 
-import { drawSelection, clearPrevSelection } from '../helpers';
+import {
+  drawSelection,
+  clearPrevSelection,
+  isHoverSelection,
+} from '../helpers';
 
 const CanvasContext = createContext();
 
@@ -40,9 +44,12 @@ export const CanvasProvider = ({ children }) => {
 
   useEffect(() => {
     const ctx = ctxRef.current;
+
+    clearPrevSelection(ctx, selection);
+
     ctx.strokeStyle = strokeColor;
     ctx.lineWidth = strokeWidth;
-  }, [strokeColor, strokeWidth]);
+  }, [strokeColor, strokeWidth, isDrawingMode]);
 
   const handleMouseMove = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
@@ -54,6 +61,12 @@ export const CanvasProvider = ({ children }) => {
 
       ctxRef.current.lineTo(offsetX, offsetY);
       ctxRef.current.stroke();
+    } else {
+      if (isHoverSelection({ x: offsetX, y: offsetY }, selection)) {
+        canvasRef.current.style.cursor = 'pointer';
+      } else {
+        canvasRef.current.style.cursor = 'default';
+      }
     }
   };
 
