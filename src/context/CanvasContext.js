@@ -4,19 +4,20 @@ import React, {
   useContext,
   useRef,
   useEffect,
-} from "react";
+} from 'react';
+
+import { drawSelection, clearPrevSelection } from '../helpers';
 
 const CanvasContext = createContext();
 
 export const CanvasProvider = ({ children }) => {
   const [isDrawing, setIsDrawing] = useState(false);
-  const [isSelecting, setIsSelecting] = useState(false);
   const [isDrawingMode, setIsDrawingMode] = useState(true);
-  const [strokeColor, setStrokeColor] = useState("#000");
+  const [strokeColor, setStrokeColor] = useState('#000');
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [canvasWidth, setCanvasWidth] = useState(220);
   const [canvasHeight, setCanvasHeight] = useState(140);
-  const [selectionStart, setSelectionStart] = useState({ x: 0, y: 0 });
+  const [selection, setSelection] = useState(null);
 
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
@@ -28,13 +29,13 @@ export const CanvasProvider = ({ children }) => {
     canvas.style.width = `${canvasWidth}px`;
     canvas.style.height = `${canvasHeight}px`;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     ctxRef.current = ctx;
 
     ctx.scale(2, 2);
     ctx.strokeStyle = strokeColor;
     ctx.lineWidth = strokeWidth;
-    ctx.lineCap = "round";
+    ctx.lineCap = 'round';
   }, [canvasWidth, canvasHeight]);
 
   useEffect(() => {
@@ -64,15 +65,10 @@ export const CanvasProvider = ({ children }) => {
       ctxRef.current.moveTo(offsetX, offsetY);
       setIsDrawing(true);
     } else {
-      setIsSelecting(true);
-      setSelectionStart({ x: offsetX, y: offsetY });
-    }
-  };
+      setSelection({ x: offsetX, y: offsetY });
 
-  const drawRectangle = (ctx, start, end) => {
-    ctx.beginPath();
-    ctx.rect(start.x, start.y, end.x, end.y);
-    ctx.stroke();
+      if (selection?.w) clearPrevSelection(ctxRef.current, selection);
+    }
   };
 
   const handleMouseUp = ({ nativeEvent }) => {
@@ -81,21 +77,31 @@ export const CanvasProvider = ({ children }) => {
     if (isDrawingMode) {
       ctxRef.current.closePath();
     } else {
-      drawRectangle(ctxRef.current, selectionStart, { x: offsetX, y: offsetY });
+      setSelection((prev) => {
+        if (!prev) return;
+
+        const { x, y } = prev;
+        const newSelection = {
+          x: Math.min(x, offsetX),
+          y: Math.min(y, offsetY),
+          w: Math.abs(x - offsetX),
+          h: Math.abs(y - offsetY),
+        };
+
+        setSelection(newSelection);
+        drawSelection(ctxRef.current, newSelection);
+      });
     }
 
     setIsDrawing(false);
-    setIsSelecting(false);
   };
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
-    const ctxRef = canvas.getContext("2d");
-    ctxRef.fillStyle = "white";
+    const ctxRef = canvas.getContext('2d');
+    ctxRef.fillStyle = 'white';
     ctxRef.fillRect(0, 0, canvas.width, canvas.height);
   };
-
-
 
   return (
     <CanvasContext.Provider
