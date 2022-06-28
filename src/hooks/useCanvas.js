@@ -3,7 +3,7 @@ import { useDraw } from './useDraw';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
-export const useCanvas = () => {
+export const useCanvas = (brushConfig) => {
   const canvas = useRef();
   const context = useRef();
 
@@ -27,12 +27,12 @@ export const useCanvas = () => {
       return;
     }
 
-    Object.assign(context.current, DEFAULT_SETTINGS);
+    Object.assign(context.current, DEFAULT_SETTINGS, brushConfig);
   };
 
   useEffect(resizeCanvasToWindow, []);
   useEffect(getCanvasContext, []);
-  useEffect(configureCanvasSettings, []);
+  useEffect(configureCanvasSettings, [brushConfig]);
 
   useDraw(canvas, context);
 

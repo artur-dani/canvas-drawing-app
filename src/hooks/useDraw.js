@@ -5,7 +5,6 @@ export const useDraw = (canvas, context) => {
   const previousCoordinates = useRef([0, 0]);
 
   const updateCoordinates = (e) => {
-    console.log(e.offsetX, e.offsetY);
     previousCoordinates.current = [e.offsetX, e.offsetY];
   };
 
