@@ -1,2 +1,2 @@
-export * from './Canvas1';
+export * from './Canvas';
 export * from './Toolbar';

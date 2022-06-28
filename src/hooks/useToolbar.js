@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { DEFAULT_SETTINGS } from '../constants';
 
 export const useToolbar = () => {
-  const [brushConfig, setBrushConfig] = useState({
+  const [config, setConfig] = useState({
     globalCompositeOperation: DEFAULT_SETTINGS.globalCompositeOperation,
     strokeStyle: DEFAULT_SETTINGS.strokeStyle,
     lineWidth: DEFAULT_SETTINGS.lineWidth,
@@ -11,8 +11,8 @@ export const useToolbar = () => {
 
   const handleConfigChange = (e) => {
     const { value, name } = e.currentTarget;
-    setBrushConfig({ ...brushConfig, [name]: value });
+    setConfig({ ...config, [name]: value });
   };
 
-  return { brushConfig, handleConfigChange };
+  return { config, handleConfigChange };
 };

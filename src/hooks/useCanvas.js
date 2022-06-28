@@ -3,40 +3,40 @@ import { useDraw } from './useDraw';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
-export const useCanvas = (brushConfig) => {
-  const canvas = useRef();
-  const context = useRef();
+export const useCanvas = (config) => {
+  const canvasRef = useRef();
+  const ctxRef = useRef();
 
   const getCanvasContext = () => {
-    if (!canvas.current) {
+    if (!canvasRef.current) {
       return;
     }
-    context.current = canvas.current.getContext('2d');
+    ctxRef.current = canvasRef.current.getContext('2d');
   };
 
   const resizeCanvasToWindow = () => {
-    if (!canvas.current) {
+    if (!canvasRef.current) {
       return;
     }
-    canvas.current.width = window.innerWidth;
-    canvas.current.height = window.innerHeight;
+    canvasRef.current.width = window.innerWidth;
+    canvasRef.current.height = window.innerHeight;
   };
 
   const configureCanvasSettings = () => {
-    if (!context.current) {
+    if (!ctxRef.current) {
       return;
     }
 
-    Object.assign(context.current, DEFAULT_SETTINGS, brushConfig);
+    Object.assign(ctxRef.current, DEFAULT_SETTINGS, config);
   };
 
   useEffect(resizeCanvasToWindow, []);
   useEffect(getCanvasContext, []);
-  useEffect(configureCanvasSettings, [brushConfig]);
+  useEffect(configureCanvasSettings, [config]);
 
-  useDraw(canvas, context);
+  useDraw(canvasRef, ctxRef);
 
   return {
-    canvas,
+    canvasRef,
   };
 };

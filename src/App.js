@@ -1,19 +1,18 @@
 import React from 'react';
 import './style.css';
 
-import Canvas from './components/Canvas';
-import SettingBar from "./components/SettingBar";
-import ConfigBar from "./components/ConfigBar";
+import { Canvas, Toolbar } from './components';
+import { useCanvas, useToolbar } from './hooks';
 
-export default function App() {
+export default function App1() {
+  const { config, handleConfigChange } = useToolbar();
+  const { canvasRef } = useCanvas(config);
+
   return (
     <div>
       <h1>Draw App!</h1>
-      <div style={{ display: "flex" }}>
-        <SettingBar />
-        <ConfigBar />
-      </div>
-      <Canvas width="540" height="320" />
+      <Toolbar onConfigChange={handleConfigChange} />
+      <Canvas canvasRef={canvasRef} />
     </div>
   );
 }
