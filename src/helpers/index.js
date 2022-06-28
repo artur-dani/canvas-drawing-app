@@ -21,7 +21,21 @@ export function isHoverSelection(cursor, selection) {
   if (cursor.x < selection.x) return false;
   if (cursor.y < selection.y) return false;
   if (cursor.x > selection.x + selection.w) return false;
-  if (cursor.y > selection.y + selection.w) return false;
+  if (cursor.y > selection.y + selection.h) return false;
 
   return true;
+}
+
+export function dragSelection(ctx, cursor, selection) {
+  if (!cursor || selection) return;
+
+  const imageData = ctx.getImageData(
+    selection.x,
+    selection.y,
+    selection.h,
+    selection.w
+  );
+
+  ctx.putImageData(imageData, cursor.x, cursor.y);
+  console.log({ cursor, selection });
 }

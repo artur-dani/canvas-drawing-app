@@ -10,6 +10,7 @@ import {
   drawSelection,
   clearPrevSelection,
   isHoverSelection,
+  dragSelection,
 } from '../helpers';
 
 const CanvasContext = createContext();
@@ -17,6 +18,7 @@ const CanvasContext = createContext();
 export const CanvasProvider = ({ children }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isDrawingMode, setIsDrawingMode] = useState(true);
+  const [isDraging, setIsDraging] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#000');
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [canvasWidth, setCanvasWidth] = useState(220);
@@ -64,6 +66,9 @@ export const CanvasProvider = ({ children }) => {
     } else {
       if (isHoverSelection({ x: offsetX, y: offsetY }, selection)) {
         canvasRef.current.style.cursor = 'pointer';
+
+        if (isDraging)
+          dragSelection(ctxRef.current, { x: offsetX, y: offsetY }, selection);
       } else {
         canvasRef.current.style.cursor = 'default';
       }
@@ -81,6 +86,9 @@ export const CanvasProvider = ({ children }) => {
       setSelection({ x: offsetX, y: offsetY });
 
       if (selection?.w) clearPrevSelection(ctxRef.current, selection);
+
+      if (isHoverSelection({ x: offsetX, y: offsetY }, selection))
+        setIsDraging(true);
     }
   };
 
