@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDraw } from './useDraw';
+import { useCanvasActions } from './useCanvasActions';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
@@ -36,9 +37,11 @@ export const useCanvas = (config) => {
   useEffect(configureCanvasSettings, [config]);
 
   useDraw(canvasRef, ctxRef, isDrawingMode);
+  const actions = useCanvasActions(canvasRef, ctxRef);
 
   return {
     canvasRef,
     setIsDrawingMode,
+    actions,
   };
 };

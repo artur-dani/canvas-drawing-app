@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
-export const Toolbar = ({ onConfigChange }) => {
+export const Toolbar = ({ onConfigChange, handleCanvasClear }) => {
   return (
     <aside
       style={{
@@ -45,11 +45,11 @@ export const Toolbar = ({ onConfigChange }) => {
         type="range"
         name="lineWidth"
         min="1"
-        max="100"
+        max="30"
         defaultValue={DEFAULT_SETTINGS.lineWidth}
       />
 
-      <button>Clear</button>
+      <button onClick={handleCanvasClear}>Clear</button>
     </aside>
   );
 };
