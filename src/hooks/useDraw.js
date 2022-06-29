@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-export const useDraw = (canvas, context) => {
+export const useDraw = (canvas, context, isDrawingMode) => {
   const isDrawing = useRef(false);
   const previousCoordinates = useRef([0, 0]);
 
@@ -44,7 +44,7 @@ export const useDraw = (canvas, context) => {
   );
 
   useEffect(() => {
-    const ref = canvas.current;
+    const ref = isDrawingMode ? canvas.current : null;
 
     if (ref) {
       ref.addEventListener('mousedown', drawStart);
@@ -61,5 +61,5 @@ export const useDraw = (canvas, context) => {
         ref.removeEventListener('mouseout', drawStop);
       }
     };
-  }, [canvas, drawMove, drawStart]);
+  }, [canvas, drawMove, drawStart, isDrawingMode]);
 };

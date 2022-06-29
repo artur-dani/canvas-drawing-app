@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDraw } from './useDraw';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
 export const useCanvas = (config) => {
+  const [isDrawingMode, setIsDrawingMode] = useState(true);
   const canvasRef = useRef();
   const ctxRef = useRef();
 
@@ -18,8 +19,8 @@ export const useCanvas = (config) => {
     if (!canvasRef.current) {
       return;
     }
-    canvasRef.current.width = window.innerWidth;
-    canvasRef.current.height = window.innerHeight;
+    canvasRef.current.width = DEFAULT_SETTINGS.width;
+    canvasRef.current.height = DEFAULT_SETTINGS.height;
   };
 
   const configureCanvasSettings = () => {
@@ -34,9 +35,10 @@ export const useCanvas = (config) => {
   useEffect(getCanvasContext, []);
   useEffect(configureCanvasSettings, [config]);
 
-  useDraw(canvasRef, ctxRef);
+  useDraw(canvasRef, ctxRef, isDrawingMode);
 
   return {
     canvasRef,
+    setIsDrawingMode,
   };
 };

@@ -4,9 +4,9 @@ import './style.css';
 import { Canvas, Toolbar } from './components';
 import { useCanvas, useToolbar } from './hooks';
 
-export default function App1() {
+export default function App() {
   const { config, handleConfigChange } = useToolbar();
-  const { canvasRef } = useCanvas(config);
+  const { canvasRef, setIsDrawingMode } = useCanvas(config);
 
   return (
     <div>
