@@ -10,6 +10,7 @@ export const Toolbar = ({ onConfigChange, handleCanvasClear }) => {
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
+        maxWidth: DEFAULT_SETTINGS.width,
       }}
     >
       <div>

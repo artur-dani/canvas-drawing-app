@@ -1,4 +1,5 @@
 export function drawSelection(ctx, selection) {
+  console.log(selection);
   ctx.beginPath();
   ctx.lineWidth = '1';
   ctx.strokeStyle = '#666';

@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDraw } from './useDraw';
-import { useCanvasActions } from './useCanvasActions';
+import { useDraw, useCanvasActions, useDrag } from './';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
 export const useCanvas = (config) => {
-  const [isDrawingMode, setIsDrawingMode] = useState(true);
+  const [isDrawingMode, setIsDrawingMode] = useState(false);
   const canvasRef = useRef();
   const ctxRef = useRef();
 
@@ -37,6 +36,8 @@ export const useCanvas = (config) => {
   useEffect(configureCanvasSettings, [config]);
 
   useDraw(canvasRef, ctxRef, isDrawingMode);
+  useDrag(canvasRef, ctxRef, !isDrawingMode);
+
   const actions = useCanvasActions(canvasRef, ctxRef);
 
   return {
