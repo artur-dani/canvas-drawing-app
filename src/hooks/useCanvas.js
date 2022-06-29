@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDraw, useCanvasActions, useDrag } from './';
+import { useDraw, useCanvasActions, useSelection, useDrag } from './';
 
 import { DEFAULT_SETTINGS } from '../constants';
 
 export const useCanvas = (config) => {
-  const [isDrawingMode, setIsDrawingMode] = useState(false);
+  const [isDrawingMode, setIsDrawingMode] = useState(true);
   const canvasRef = useRef();
   const ctxRef = useRef();
 
@@ -12,7 +12,7 @@ export const useCanvas = (config) => {
     if (!canvasRef.current) {
       return;
     }
-    ctxRef.current = canvasRef.current.getContext('2d');
+    ctxRef.current = canvasRef.current.getContext("2d");
   };
 
   const resizeCanvasToWindow = () => {
@@ -36,13 +36,14 @@ export const useCanvas = (config) => {
   useEffect(configureCanvasSettings, [config]);
 
   useDraw(canvasRef, ctxRef, isDrawingMode);
-  useDrag(canvasRef, ctxRef, !isDrawingMode);
+  useSelection(canvasRef, ctxRef, !isDrawingMode);
 
   const actions = useCanvasActions(canvasRef, ctxRef);
 
   return {
     canvasRef,
     setIsDrawingMode,
+    isDrawingMode,
     actions,
   };
-};
+};;

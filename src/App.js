@@ -6,11 +6,14 @@ import { useCanvas, useToolbar } from './hooks';
 
 export default function App() {
   const { config, handleConfigChange } = useToolbar();
-  const { canvasRef, setIsDrawingMode, actions } = useCanvas(config);
+  const { canvasRef, setIsDrawingMode, actions, isDrawingMode } = useCanvas(config);
 
   return (
-    <div>
+    <div style={{ margin: "0 auto", padding: "10px 16px" }}>
       <h1>Draw App!</h1>
+      <button onClick={() => setIsDrawingMode(!isDrawingMode)}>
+        Toggle Drawing Mode
+      </button>
       <Toolbar onConfigChange={handleConfigChange} {...actions} />
       <Canvas canvasRef={canvasRef} />
     </div>
