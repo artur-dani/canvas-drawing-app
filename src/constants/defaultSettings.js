@@ -4,6 +4,6 @@ export const DEFAULT_SETTINGS = Object.freeze({
   strokeStyle: '#000',
   lineWidth: 2,
   globalCompositeOperation: 'source-over',
-  width: 460,
-  height: 300
+  width: 720,
+  height: 400,
 });
