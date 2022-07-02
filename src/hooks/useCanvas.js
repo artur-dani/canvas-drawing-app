@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDraw, useCanvasActions, useSelection, useDrag } from './';
+import { useDraw, useCanvasActions, useSelection } from './';
 
 import { DEFAULT_SETTINGS } from '../constants';
 

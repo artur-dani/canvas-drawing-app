@@ -1,6 +1,5 @@
 export * from './useCanvas';
 export * from './useDraw';
-export * from './useDrag';
 export * from './useToolbar';
 export * from './useCanvasActions';
-export * from "./useSelection";
+export * from './useSelection';

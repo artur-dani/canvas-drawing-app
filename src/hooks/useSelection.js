@@ -1,11 +1,11 @@
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback, useState } from 'react';
 
 import {
   drawSelection,
   clearPrevSelection,
   isHoveringSelection,
   dragSelection,
-} from "../helpers";
+} from '../helpers';
 
 export const useSelection = (canvas, context, isSelectingMode) => {
   const [isSelecting, setIsSelecting] = useState(false);
@@ -55,12 +55,19 @@ export const useSelection = (canvas, context, isSelectingMode) => {
       } else {
         // move selection
         if (selection.current) {
-          console.log("handleMouseUp ", selection.current);
           dragSelection(
             context.current,
             { x: e.offsetX, y: e.offsetY },
             selection.current
           );
+
+          //clear and update selection
+          clearPrevSelection(context.current, selection.current);
+          selection.current = {
+            ...selection.current,
+            x: e.offsetX,
+            y: e.offsetY,
+          };
         }
       }
     },
@@ -72,18 +79,18 @@ export const useSelection = (canvas, context, isSelectingMode) => {
     const ref = isSelectingMode ? canvas.current : null;
 
     if (ref) {
-      ref.addEventListener("mousedown", handleMouseDown);
-      ref.addEventListener("mousemove", handleMouseMove);
-      ref.addEventListener("mouseup", handleMouseUp);
-      ref.addEventListener("mouseout", handleMouseOut);
+      ref.addEventListener('mousedown', handleMouseDown);
+      ref.addEventListener('mousemove', handleMouseMove);
+      ref.addEventListener('mouseup', handleMouseUp);
+      ref.addEventListener('mouseout', handleMouseOut);
     }
 
     return () => {
       if (ref) {
-        ref.removeEventListener("mousedown", handleMouseDown);
-        ref.removeEventListener("mousemove", handleMouseMove);
-        ref.removeEventListener("mouseup", handleMouseUp);
-        ref.removeEventListener("mouseout", handleMouseOut);
+        ref.removeEventListener('mousedown', handleMouseDown);
+        ref.removeEventListener('mousemove', handleMouseMove);
+        ref.removeEventListener('mouseup', handleMouseUp);
+        ref.removeEventListener('mouseout', handleMouseOut);
       }
     };
   }, [
